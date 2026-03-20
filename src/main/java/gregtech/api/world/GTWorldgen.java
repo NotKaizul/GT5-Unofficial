@@ -42,8 +42,9 @@ public abstract class GTWorldgen {
         return false;
     }
 
-    public int executeWorldgenChunkified(World aWorld, Random aRandom, String aBiome, int aChunkX, int aChunkZ,
-        int seedX, int seedZ, IChunkProvider aChunkGenerator, IChunkProvider aChunkProvider) {
+    public int executeWorldgenChunkified(World world, Random rng, String biome, int chunkX, int chunkZ, int seedX,
+        int seedZ, int veinWestX, int veinEastX, int veinNorthZ, int veinSouthZ, int veinMinY,
+        IChunkProvider chunkGenerator, IChunkProvider chunkProvider) {
         return ORE_PLACED; // This is for the empty Orevein
     }
 

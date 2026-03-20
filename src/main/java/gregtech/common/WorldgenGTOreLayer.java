@@ -9,16 +9,10 @@ import java.util.HashSet;
 import java.util.Random;
 import java.util.Set;
 
-import net.minecraft.block.Block;
 import net.minecraft.world.World;
-import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.chunk.IChunkProvider;
-import net.minecraft.world.chunk.storage.ExtendedBlockStorage;
-import net.minecraftforge.common.util.ForgeDirection;
 
-import galacticgreg.api.ModDimensionDef;
 import galacticgreg.api.enums.DimensionDef;
-import gregtech.api.enums.StoneType;
 import gregtech.api.interfaces.IOreMaterial;
 import gregtech.api.interfaces.IStoneCategory;
 import gregtech.api.util.GTLog;
@@ -137,7 +131,8 @@ public class WorldgenGTOreLayer extends GTWorldgen implements IWorldgenLayer {
 
     @Override
     public int executeWorldgenChunkified(World world, Random rng, String biome, int chunkX, int chunkZ, int seedX,
-        int seedZ, IChunkProvider chunkGenerator, IChunkProvider chunkProvider) {
+        int seedZ, int veinWestX, int veinEastX, int veinNorthZ, int veinSouthZ, int veinMinY,
+        IChunkProvider chunkGenerator, IChunkProvider chunkProvider) {
         if (mWorldGenName.equals("NoOresInVein")) {
             if (debugOrevein) GTLog.out.println(" NoOresInVein");
             // Return a special empty orevein
@@ -156,92 +151,13 @@ public class WorldgenGTOreLayer extends GTWorldgen implements IWorldgenLayer {
 
         int[] placeCount = new int[4];
 
-        int veinMinY = mMinY + rng.nextInt(mMaxY - mMinY - 5);
-        // Determine West/East ends of orevein
-        int veinWestX = seedX - rng.nextInt(mSize); // West side
-        int veinEastX = seedX + 16 + rng.nextInt(mSize);
-        // Limit Orevein to only blocks present in current chunk
         int limitWestX = Math.max(veinWestX, chunkX + 2); // Bias placement by 2 blocks to prevent worldgen cascade.
         int limitEastX = Math.min(veinEastX, chunkX + 2 + 16);
-
-        ModDimensionDef dimensionDef = DimensionDef.getDefForWorld(world);
-
-        if (!dimensionDef.respectsOreVeinHeights()) {
-            // Offset the chunkX/Z by the magic numbers used below to get the 'centre' (I have no idea where they come
-            // from).
-            int x = chunkX + 7;
-            int z = chunkZ + 9;
-
-            Chunk chunk = world.getChunkFromBlockCoords(x, z);
-
-            int minY = world.getActualHeight();
-            int maxY = 0;
-
-            // Most EBS's will be empty in the end, so instead of doing a naive 0-256 scan we can check each one
-            // separately.
-            // This is also faster than World.getBlock since there are fewer lookups needed to get a block.
-            for (ExtendedBlockStorage ebs : chunk.getBlockStorageArray()) {
-                if (ebs == null) continue;
-
-                for (int y = 0; y < 16; y++) {
-                    Block block = ebs.getBlockByExtId(7, y, 9);
-
-                    int realY = y + ebs.getYLocation();
-
-                    if (block.isBlockSolid(world, x, realY, z, ForgeDirection.UP.ordinal())) {
-                        minY = Math.min(minY, realY);
-                        maxY = Math.max(maxY, realY);
-                    }
-                }
-            }
-
-            veinMinY = minY + rng.nextInt(maxY - minY + 1);
-        }
-
-        if (limitWestX >= limitEastX) { // No overlap between orevein and this chunk exists in X
-            int hits = 0;
-
-            // Check for stone at the center of the chunk and the bottom of the orevein.
-            for (int i = 0; i < 9; i++) {
-                if (StoneType.findStoneType(world, chunkX + 7, veinMinY + i, chunkZ + 9) != null) {
-                    hits++;
-                }
-            }
-
-            if (hits >= 5) {
-                // Didn't reach, but could have placed. Save orevein for future use.
-                return NO_OVERLAP;
-            } else {
-                // Didn't reach, but couldn't place in test spot anyways, try for another orevein
-                return NO_OVERLAP_AIR_BLOCK;
-            }
-        }
-
-        // Determine North/Sound ends of orevein
-        int veinNorthZ = seedZ - rng.nextInt(mSize);
-        int veinSouthZ = seedZ + 16 + rng.nextInt(mSize);
 
         int limitNorthZ = Math.max(veinNorthZ, chunkZ + 2); // Bias placement by 2 blocks to prevent worldgen cascade.
         int limitSouthZ = Math.min(veinSouthZ, chunkZ + 2 + 16);
 
-        if (limitNorthZ >= limitSouthZ) { // No overlap between orevein and this chunk exists in Z
-            int hits = 0;
-
-            // Check for stone at the center of the chunk and the bottom of the orevein.
-            for (int i = 0; i < 9; i++) {
-                if (StoneType.findStoneType(world, chunkX + 7, veinMinY + i, chunkZ + 9) != null) {
-                    hits++;
-                }
-            }
-
-            if (hits >= 5) {
-                // Didn't reach, but could have placed. Save orevein for future use.
-                return NO_OVERLAP;
-            } else {
-                // Didn't reach, but couldn't place in test spot anyways, try for another orevein
-                return NO_OVERLAP_AIR_BLOCK;
-            }
-        }
+        if (limitWestX >= limitEastX || limitNorthZ >= limitSouthZ) return NO_OVERLAP;
 
         if (debugOrevein) {
             GTLog.out.print(

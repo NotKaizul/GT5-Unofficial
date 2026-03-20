@@ -140,7 +140,7 @@ public enum StoneType implements IStoneType {
         .addAllowedDimensions(DimNames.ASTEROIDS, DimNames.KUIPERBELT, DimNames.MEHENBELT)),
     SethIce(new StoneBuilder()
         .setStoneNoCobble(() -> Blocks.packed_ice, 0)
-        .addOtherStone(Mods.Minecraft, () -> Blocks.ice, 0)
+        // .addOtherStone(Mods.Minecraft, () -> Blocks.ice, 0)
         .setDust(Materials.Ice)
         .setCategory(StoneCategory.Stone)
         .addAllowedDimensions(DimNames.SETH)),

@@ -376,8 +376,8 @@ public class GTPreLoad {
         GTValues.debugBlockPump = Gregtech.debug.debugBlockPump;
         GTValues.debugEntityCramming = Gregtech.debug.debugEntityCramming;
         GTValues.debugWorldData = Gregtech.debug.debugWorldData;
-        GTValues.oreveinAttempts = Gregtech.general.oreveinAttempts;
-        GTValues.oreveinMaxPlacementAttempts = Gregtech.general.oreveinMaxPlacementAttempts;
+        GTValues.oreVeinAttempts = Gregtech.general.oreveinAttempts;
+        GTValues.oreVeinMaxPlacementAttempts = Gregtech.general.oreveinMaxPlacementAttempts;
         GTValues.oreveinPlacerOres = Gregtech.general.oreveinPlacerOres;
         GTValues.oreveinPlacerOresMultiplier = Gregtech.general.oreveinPlacerOresMultiplier;
         GregTechAPI.TICKS_FOR_LAG_AVERAGING = Gregtech.general.ticksForLagAveraging;

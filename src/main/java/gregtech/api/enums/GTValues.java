@@ -299,14 +299,14 @@ public class GTValues {
      * Control number of attempts to find a valid orevein. Generally this maximum limit isn't hit, selecting a vein is
      * cheap
      */
-    public static int oreveinAttempts;
+    public static int oreVeinAttempts;
     /**
      * Control number of attempts to place a valid ore vein.
      * <p>
      * If a vein wasn't placed due to height restrictions, completely in the water, etc, another attempt is tried.
      * </p>
      */
-    public static int oreveinMaxPlacementAttempts;
+    public static int oreVeinMaxPlacementAttempts;
     /**
      * Whether to place small ores as placer ores for an orevein
      */
