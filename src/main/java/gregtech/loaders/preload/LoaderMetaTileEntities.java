@@ -213,6 +213,7 @@ import gregtech.common.tileentities.machines.multi.MTEMassSolidifier;
 import gregtech.common.tileentities.machines.multi.MTEMegaChemicalReactor;
 import gregtech.common.tileentities.machines.multi.MTEMegaDistillationTower;
 import gregtech.common.tileentities.machines.multi.MTEMegaOilCracker;
+import gregtech.common.tileentities.machines.multi.MTEMonsterMulti;
 import gregtech.common.tileentities.machines.multi.MTEMultiAutoclave;
 import gregtech.common.tileentities.machines.multi.MTEMultiCanner;
 import gregtech.common.tileentities.machines.multi.MTEMultiFurnace;
@@ -557,6 +558,10 @@ public class LoaderMetaTileEntities implements Runnable { // TODO CHECK CIRCUIT 
                 "Extreme Combustion Engine").getStackForm(1L));
         ItemList.Machine_Multi_Cleanroom.set(
             new MTECleanroom(CLEANROOM_CONTROLLER.ID, "multimachine.cleanroom", "Cleanroom Controller")
+                .getStackForm(1));
+
+        ItemList.Machine_Multi_MonsterRepellator.set(
+            new MTEMonsterMulti(MMR_CONTROLLER.ID, "multimachine.monstermulti", "Monster Repellator Multi")
                 .getStackForm(1));
 
         ItemList.Machine_Multi_LargeChemicalReactor.set(
